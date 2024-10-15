@@ -8,38 +8,6 @@ export default function CartPage() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const res = await fetch("http://127.0.0.1:8000/api/orders/cart/", {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch cart");
-        }
-
-        const { cart, total_price } = await res.json();
-        setCart(cart);
-        setTotalPrice(total_price);
-      } catch (error) {
-        console.error(error.message);
-      } finally {
-        setLoading(false); // اطمینان از اینکه بارگذاری در هر صورت متوقف می‌شود
-      }
-    };
-
-    fetchCart();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>; // نمایش صفحه بارگذاری
-  }
-
   return (
     <div>
       <h1>Shopping Cart</h1>
@@ -49,18 +17,18 @@ export default function CartPage() {
             {cart.map((item) => (
               <li key={item.product_id}>
                 <Image
-                  src={item.image || ""}
+                  src={item?.image || ""}
                   width={100}
                   height={100}
                   alt={item.name}
                 />
-                <p>{item.name}</p>
-                <p>Quantity: {item.quantity}</p>
-                <p>Price: {item.price.toFixed(2)}</p>
+                <p>{item?.name}</p>
+                <p>Quantity: {item?.quantity}</p>
+                <p>Price: {item?.price.toFixed(2)}</p>
               </li>
             ))}
           </ul>
-          <h2>Total Price: {totalPrice.toFixed(2)}</h2>
+          <h2>Total Price: {totalPrice?.toFixed(2)}</h2>
         </div>
       ) : (
         <p>Your cart is empty.</p>
